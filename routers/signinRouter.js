@@ -1,6 +1,5 @@
 const express = require('express');
 const expressAsyncHandler = require('express-async-handler')
-const userModel = require('../models/userModel')
 const bcrypt = require('bcrypt');
 const User = require('../models/userModel');
 require('dotenv').config();
@@ -10,8 +9,8 @@ uRouter.post('/', expressAsyncHandler(async(request, response)=>{
     try{
         const email = request.body.email;
         const password = await bcrypt.hash(request.body.password, 10);
-        
-        const existingUser = User.findOne({email})
+
+        const existingUser = await User.findOne({email})
         if(existingUser) return response.status(400).json({ error: 'Email already exists' });
 
         const theme = false;

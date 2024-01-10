@@ -10,6 +10,10 @@ uRouter.post('/', expressAsyncHandler(async(request, response)=>{
     try{
         const email = request.body.email;
         const password = await bcrypt.hash(request.body.password, 10);
+        
+        const existingUser = User.findOne({email})
+        if(existingUser) return response.status(400).json({ error: 'Email already exists' });
+
         const theme = false;
         const mo = "Month";
     

@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
     res.send('This server is for outlay!')
 })
 
-app.use('/api/signin', signinRouter)
+app.route('/api/signin', signinRouter)
 
 app.listen(PORT, ()=>{
     console.log(`server is at ${PORT}`);

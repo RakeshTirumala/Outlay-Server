@@ -7,7 +7,11 @@ const PORT = 9090;
 app.use(express.json());
 
 // app.use(express.urlencoded({extended:true}))
-mongoose.connect( process.env.MONGODB__CLUSTER)
+mongoose.connect( process.env.MONGODB__CLUSTER, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    ssl: true, 
+  })
 
 app.get('/', (req, res) => {
     res.send('This server is for outlay!')

@@ -7,17 +7,13 @@ const PORT = 9090;
 app.use(express.json());
 
 // app.use(express.urlencoded({extended:true}))
-mongoose.connect( process.env.MONGODB__CLUSTER, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    ssl: true, 
-  })
+mongoose.connect( process.env.MONGODB__CLUSTER)
 
 app.get('/', (req, res) => {
     res.send('This server is for outlay!')
 })
 
-app.route('/api/signin', signinRouter)
+app.use('/api/signin', signinRouter)
 
 app.listen(PORT, ()=>{
     console.log(`server is at ${PORT}`);

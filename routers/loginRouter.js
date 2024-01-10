@@ -21,10 +21,10 @@ userLoginRouter.post('/', expressAsyncHandler(async(request, response)=>{
         if(!passwordMatch) return response.status(401).json({error:"Invalid email or password!"});
 
         //GENERATE TOKEN 
-        const token = jwt.sign({ email: existingUser._id}, process.env.JWT_SECRET_KEY, { expiresIn: '720h' });
+        const token = jwt.sign({ email: existingUser.email}, process.env.JWT_SECRET_KEY, { expiresIn: '72h' });
     
         //RESPONSE
-        response.status(201).json({message:'Login Successful!', token})
+        response.status(201).json({message:'Login Successful!', token:token})
     }catch(error){
         console.log(error)
         response.status(500).json({error:'Internal Error!'});

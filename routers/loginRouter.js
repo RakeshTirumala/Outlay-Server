@@ -24,7 +24,7 @@ userLoginRouter.post('/', expressAsyncHandler(async(request, response)=>{
         const token = jwt.sign({ email: existingUser.email}, process.env.JWT_SECRET_KEY, { expiresIn: '720h' });
     
         //RESPONSE
-        response.status(201).json({message:'Login Successful!', token:token})
+        response.status(201).json({message:'Login Successful!', token:token, theme:existingUser.theme, mo:existingUser.mo})
     }catch(error){
         console.log(error)
         response.status(500).json({error:'Internal Error!'});

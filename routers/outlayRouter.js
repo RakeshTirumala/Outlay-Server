@@ -3,12 +3,19 @@ const expressAsyncHandler = require('express-async-handler');
 const User = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 
+
 const outlayRouter = express.Router();
 const getRandomColor = () => {
     const randomColor = () => Math.floor(Math.random() * 256);
     const r = randomColor();
     const g = randomColor();
     const b = randomColor();
+    
+    const lightThreshold = 500
+
+    if (r + g + b < lightThreshold) {
+        return getRandomColor();
+    }
   
     const hexValue = (component) => {
       const hex = component.toString(16);
@@ -29,6 +36,15 @@ const getColorPalette = (count) => {
     }
     return palette;
 };
+
+const getMonth=(m)=>{
+    const months = {1:'Jan', 2:'Feb',3:'Mar', 4:'Apr', 5:'May', 6:'Jun',
+                    7:'Jul', 8:'Aug', 9:'Sep', 10:'Oct', 11:'Nov', 12:'Dec'}
+    const month = months[parseInt(m)];
+    return month;
+}
+
+
 outlayRouter.get('/', authenticatingToken, expressAsyncHandler(async(request, response)=>{
     const email = request.query.email;
     const monthYear = request.query.monthYear;
@@ -86,6 +102,27 @@ outlayRouter.get('/', authenticatingToken, expressAsyncHandler(async(request, re
     }catch(error){
         response.status(500).json({error:"couldn't get"});
     }
+}))
+
+outlayRouter.get('/overall', authenticatingToken, expressAsyncHandler(async(request, response)=>{
+    const email = request.query.email;
+    try{
+        const user = await User.findOne({email})
+        if(!user.expenditure) return response.status(200).json({message:'No data!', data:[]})
+        let months = [];
+        let totalExpenses = [];
+        for(const key in user.expenditure){
+            let sum = 0;
+            user.expenditure[key].forEach(obj=>sum+=obj.expense);
+            let m = key.slice('_');
+            months.push(getMonth(m));
+            totalExpenses.push(sum);
+        }
+        response.status(200).json({months:months, totalExpenses:totalExpenses})
+    }catch(error){
+        response.status(500).json({error:"couldn't get"});
+    }
+
 }))
 
 function authenticatingToken(req,res,next){

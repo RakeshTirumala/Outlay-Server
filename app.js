@@ -5,6 +5,8 @@ const signinRouter = require('./routers/signinRouter');
 const userLoginRouter = require('./routers/loginRouter');
 const expenditureRouter = require('./routers/expenditureRouter');
 const outlayRouter = require('./routers/outlayRouter');
+const themeRouter = require('./routers/themeRouter');
+const moRouter = require('./routers/moRouter');
 const app = express()
 const PORT = 9090;
 app.use(express.json());
@@ -23,6 +25,10 @@ app.use('/api/login/', userLoginRouter);
 app.use('/api/expense', expenditureRouter);
 
 app.use('/api/outlay', outlayRouter);
+
+app.use('/api/theme', themeRouter);
+
+app.use('/api/mo', moRouter)
 
 app.listen(process.env.PORT||PORT, ()=>{
     console.log(`server is at ${PORT}`);
